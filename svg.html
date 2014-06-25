@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="bower_components/reset-css/reset.css"/>
+    <script>
+        document.addEventListener('DOMContentLoaded', function (){
+            var path = document.getElementById('path');
+            var strpath = '';
+
+            document.getElementById('svg').addEventListener('click', function (event){
+                if(strpath) {
+                    strpath += 'L' + event.clientX + ' ' + event.clientY + ' ';
+                } else {
+                    strpath = 'M' + event.clientX + ' ' + event.clientY + ' ';
+                }
+                path.setAttribute('d', strpath);
+            });
+        });
+    </script>
+</head>
+<body>
+    <svg id="svg" width="1200" height="600" style="background-color: #eee;">
+        <path id="path" d="M150 0 L225 200 L100 30 Z" stroke="red" fill="none"/>
+    </svg>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        html, body {
+            height: 100%;
+            font: 300 1em 'Helvetica Neue';
+        }
+        input {
+            font: 300 1em 'Helvetica Neue';
+            padding: 0.25em;
+            outline: none;
+            border: 1px solid #eee;
+            color: #888;
+        }
+        div#contextmenu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            color: #555;
+            text-shadow: 1px 1px 1px #eee;
+            padding: 1em;
+            background-color: #eee;
+            border: 1px solid #888;
+            box-shadow: 1px 1px 5px #eee;
+            display: none;
+        }
+
+        div#contextmenu > div {
+            cursor: pointer;
+            border: 1px solid gray;
+            padding: 0.25em 0.5em;
+            margin: 0.25em;
+
+        }
+
+
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function (){
+            var inp = document.getElementById('inp');
+
+            technique2();
+
+            document.body.addEventListener('contextmenu', function(event){
+                console.log(event);
+                event.preventDefault();
+
+                var menu = document.getElementById('contextmenu');
+                menu.style.left = 10 + event.clientX + 'px';
+                menu.style.top = 10 + event.clientY + 'px';
+                menu.style.display = 'block';
+
+            });
+
+            document.getElementById('addDiv').addEventListener('click', function (){
+                var div = document.createElement('div');
+                div.innerHTML = 'I am a div. I just got added.';
+                document.body.appendChild(div);
+                document.getElementById('contextmenu').style.display = 'none';
+            });
+
+
+        });
+
+        function technique2(){
+            var banned = '!@#$%^&*()';
+
+            var codes = [];
+            for (var i = 0; i < banned.length; i++) {
+                codes.push(banned.charCodeAt(i));
+            }
+            console.log(codes);
+
+            document.getElementById('inp').addEventListener('keypress', function (event){
+                // check if the charCode exists in the code array
+                // if it does do not allow the character to show up
+                if (codes.indexOf(event.charCode) !== -1) {
+                    event.preventDefault();
+                }
+            });
+
+        }
+
+        function technique1 (){
+            var banned = '!@#$%^&*()';
+
+            document.getElementById('inp').addEventListener('keypress', function (event){
+                // if (banned.indexOf(String.fromCharCode(event.charCode)) !== -1)
+                // check for lowercase
+                console.log(event.charCode);
+                if (!(event.charCode >= 97 && event.charCode <= 122))
+                    event.preventDefault();
+            });
+        }
+    </script>
+</head>
+<body>
+
+<input type="text" id="inp"/>
+<div id="contextmenu">
+    <div id="addDiv">
+        Add a div
+    </div>
+    <div id="addSpan">
+        Add a span
+    </div>
+</div>
+
+</body>
+</html>
