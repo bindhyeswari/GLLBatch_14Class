@@ -1,0 +1,98 @@
+
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>sty</title>
+    <style type="text/css">
+        html, body {
+            height: 100%;
+            font: 300 1em 'Helvetica Neue';
+        }
+        input {
+            font: 300 1em 'Helvetica Neue';
+            padding: 0.25em;
+            outline: none;
+            border: 1px solid #eee;
+            color: #888;
+        }
+    </style>
+    <script>
+
+        HTMLFormElement.prototype.getJSON = function (){
+            var obj = {};
+            var children = this.children;
+
+            // loop over all the children
+            for (var i = 0; i < children.length; i++){
+                // get a reference to the particular child
+                var child = children[i];
+                //console.dir(child);
+
+                // check if the child is of input type text
+                //console.log(child.tagName === 'INPUT');
+                //console.log(child instanceof HTMLInputElement);
+                if (child.tagName === 'INPUT') {
+                    // get the name of the input element
+                    var prop = child.getAttribute('name');
+                    // console.log(prop);
+                    var propvalue = child.value;
+                    // console.log(propvalue);
+
+                    if(prop) {
+                        obj[prop] = propvalue;
+                    }
+                }
+
+            }
+            return obj;
+        };
+
+        document.addEventListener('DOMContentLoaded', function (){
+
+            var forms = document.forms;
+            for (var i = 0; i < forms.length; i++) {
+                forms[i].addEventListener('submit', formToJSON);
+            }
+
+            function formToJSON(event){
+                var data = event.target.getJSON();
+                console.log(data);
+                event.preventDefault();
+            }
+        });
+    </script>
+</head>
+<body>
+<form action="/asdf" method="get">
+    <input type="text" name="username" placeholder="username ... "/>
+    <input type="text" name="company" placeholder="company ... "/>
+    <input type="submit" value="Submit Form"/>
+</form>
+
+<form action="/asdffasdf" method="get">
+    <input type="text" name="order" placeholder="order ... "/>
+    <input type="text" name="item" placeholder="item ... "/>
+    <input type="submit" value="Submit Form"/>
+</form>
+<form action="/asdffasdf" method="get">
+    <input type="text" name="order" placeholder="order ... "/>
+    <input type="text" name="item" placeholder="item ... "/>
+    <input type="submit" value="Submit Form"/>
+</form>
+<form action="/asdffasdf" method="get">
+    <input type="text" name="order" placeholder="order ... "/>
+    <input type="text" name="item" placeholder="item ... "/>
+    <input type="submit" value="Submit Form"/>
+</form>
+<form action="/asdffasdf" method="get">
+    <input type="text" name="order" placeholder="order ... "/>
+    <input type="text" name="item" placeholder="item ... "/>
+    <input type="submit" value="Submit Form"/>
+</form>
+<form action="/asdffasdf" method="get">
+    <input type="text" name="order" placeholder="order ... "/>
+    <input type="text" name="item" placeholder="item ... "/>
+    <input type="submit" value="Submit Form"/>
+</form>
+</body>
+</html>

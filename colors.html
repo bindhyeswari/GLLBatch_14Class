@@ -1,0 +1,163 @@
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Document</title>
+    <script>
+        Object.prototype.toZeroed = function (num) {
+            var str = this.toString();
+            if( str.length >= num ) {
+                return str;
+            } else {
+                return (new Array(num - str.length + 1)).join('0') + str;
+            }
+        };
+        HTMLElement.prototype.createDiv = function(className, html) {
+            var div = document.createElement('div');
+            div.className = className;
+            if (typeof html !== 'undefined')
+                div.innerHTML = html;
+            this.appendChild(div);
+            return div;
+        };
+        function incrementColor(element, value, index) {
+            var color = element.style.backgroundColor;
+            if (color.length === 0) return;
+            var components = color.match(/\d+/g).map(function (elem){ return Number(elem)});
+            if (components[index] >= 255 && value > 0) return components;
+            if (components[index] <= 0 && value < 0) return components;
+            components[index] += value;
+            element.style.backgroundColor = 'rgb(' + components.join(', ') + ')';
+            return components;
+        }
+
+        document.addEventListener('DOMContentLoaded', function (){
+
+            var basecolor = 0;
+
+            var swatch = document.getElementById('swatch');
+            var base = document.getElementById('base');
+            var children = document.getElementById('colorcode').children;
+
+            var basecolors = document.getElementById('base_colors').children;
+            for (var i = 0; i < basecolors.length; i++) {
+                basecolors[i].onclick = function (event) {
+                    swatch.innerHTML = '';
+                    var index = Array.prototype.indexOf.call(basecolors, event.target);
+                    basecolor = index;
+                    var components = [0,0,0];
+                    for ( var i = 0; i < 10; i++ ) {
+                        components[index] = i * 25;
+                        var shade = swatch.createDiv('shades');
+                        shade.style.backgroundColor = 'rgb(' + components.join(', ') + ')';
+                        shade.onclick = function (e){
+                            var comps = e.target.style.backgroundColor.match(/\d+/g);
+                            comps.forEach(function(comp, index) {
+                                children[index].innerHTML = comp.toZeroed(3);
+                            });
+                            base.style.backgroundColor = e.target.style.backgroundColor;
+                        };
+                    }
+                };
+            }
+
+            base.addEventListener('wheel', function(event){
+                if(event.target.style.backgroundColor) {
+
+                    var val;
+                    // check if the value is negative
+                    if (event.deltaY < 0)
+                        val = Math.floor(event.deltaY);
+                    else
+                        val = Math.ceil(event.deltaY);
+
+                    var comps = incrementColor(base, val, basecolor);
+
+                    comps.forEach(function(comp, index) {
+                        children[index].innerHTML = comp.toZeroed(3);
+                    })
+                }
+
+            });
+
+
+        });
+    </script>
+    <link rel="stylesheet" href="bower_components/reset-css/reset.css"/>
+    <style>
+        body {
+            font: 300 1em 'Helvetica Neue';
+        }
+        div.shades{
+            height: 5em;
+            width: 10%;
+            display: inline-block;
+            cursor: pointer;
+        }
+        div#swatch{
+            background-color: #eee;
+            min-height: 5em;
+            width: 70%;
+            margin: 0 auto;
+        }
+        div#base {
+            margin: 1em auto;
+            width: 20em;
+            height: 20em;
+            border: 1px solid #eee;
+            background-color: rgb(255, 255, 255);
+        }
+        div#colorcode {
+            margin: 1em auto;
+            width: 20em;
+            display: flex;
+            justify-content: space-around;
+        }
+        div.color_component {
+            padding: 0.5em;
+            border: 1px solid #eed;
+            color: #555;
+        }
+        div#base_colors {
+            margin: 1em auto;
+            width: 20em;
+            display: flex;
+            justify-content: space-around;
+        }
+        div.base_color {
+            padding: 0.5em;
+            border: 1px solid #eed;
+            color: #555;
+            height: 5em;
+            width: 5em;
+            cursor: pointer;
+        }
+        div.base_color:first-child {
+            background-color: red;
+        }
+        div.base_color:nth-child(2n) {
+            background-color: green;
+        }
+        div.base_color:last-child {
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div id="base_colors">
+        <div class="base_color"></div>
+        <div class="base_color"></div>
+        <div class="base_color"></div>
+    </div>
+    <div id="swatch">
+
+    </div>
+    <div id="colorcode">
+        <div class="color_component">255</div>
+        <div class="color_component">255</div>
+        <div class="color_component">255</div>
+    </div>
+    <div id="base">
+
+    </div>
+</body>
+</html>
