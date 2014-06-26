@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        div.shades {
+            height: 5em;
+            width: 5em;
+            margin: 1em;
+            display: inline-block;
+        }
+        div#baseDiv {
+            height: 10em;
+            width: 10em;
+            margin: 0 auto;
+            border: 1px solid gray;
+        }
+    </style>
+    <script>
+
+        window.onload = function() {
+
+            var index = 2;
+            var basediv = document.getElementById('baseDiv');
+
+
+            // creating shades
+            for (var i = 0; i < 11; i++){
+
+                var div = document.createElement('div');
+                var components = [0,0,0];
+                components[index] = i * 25;
+                div.style.backgroundColor = 'rgb(' + components.join(', ') + ')';
+                div.className = 'shades';
+                document.body.appendChild(div);
+
+                div.onclick = function (event){
+                    basediv.style.backgroundColor = event.target.style.backgroundColor;
+                };
+
+
+            }
+
+            // basediv --> handle wheel event
+            basediv.addEventListener('wheel', function(event){
+                console.log(event.deltaY);
+                var val = 0;
+                // Math.floor and Math.ceil
+                if(event.deltaY >= 0) {
+                   val = Math.ceil(event.deltaY);
+                } else {
+                    val = Math.floor(event.deltaY);
+                }
+                console.log(val);
+
+                incrementColor(event.target, val, index);
+
+
+            });
+
+            // increment color components of any element
+            function incrementColor(element, value, index) {
+                var components = element.style.backgroundColor.match(/\d+/g).map(function (elem) {
+                    return Number(elem);
+                });
+
+                console.log(components);
+
+                components[index] += value;
+                element.style.backgroundColor = 'rgb(' + components.join(', ') + ')';
+            }
+        };
+
+
+    </script>
+
+</head>
+<body>
+
+    <div id="baseDiv"></div>
+
+</body>
+</html>
